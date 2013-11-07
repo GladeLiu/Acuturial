@@ -1,0 +1,21 @@
+sf1<-function(n,m,df){
+  if(missing(df)){
+    df=5;
+   }
+   if(missing(m)){
+     m=n;
+   }
+     library(pracma);
+     X<-zeros(n,m);
+     Y<-zeros(1,m);
+     r<-function(x){x=rt(n,df)};
+     X<-apply(X,1,r)
+    s<-function(x){
+       sum(x)/sqrt(n*df/(df-2));
+    }
+     Y<-apply(X,1,s);
+     Yd<-density(Y); 
+     Yf<-ecdf(Y);
+   output<-list(num=Y,ecd=Yf,den=Yd);
+  output;
+}

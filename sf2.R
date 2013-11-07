@@ -1,0 +1,28 @@
+sf2<-function(t,m,b,pdf,df){
+  if(missing(df)){
+     df=4;
+  }
+  if(pdf!=1&pdf!=2&pdf!=3){
+    stop("²ÎÊý´íÎó£¡");
+  }
+  library(pracma);
+  X<-zeros(t,m);
+   time<-function(y){
+       x<-switch(pdf,rnorm(t),rcauchy(t),rt(t,df));
+       y<-cbind(0,y);
+       for(i in 1:t){
+         y[i+1]=b*y[i]+x[i];
+       }
+     y<-y[2:(t+1)];
+   }
+  X<-apply(X,1,time);
+    hatbeta<-function(y){
+     y1<-y[1:(t-1)];
+     y2<-y[2:t];
+     sum(y1*y2)/sum(y^2);
+    }
+   beta<-apply(t(X),1,hatbeta);
+  MSE<-mean((beta-b)^2);
+  Bias<-mean(beta-b);
+ list(MSE=MSE,Bias=Bias);
+}
